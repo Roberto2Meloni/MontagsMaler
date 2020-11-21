@@ -49,19 +49,22 @@ def creatFolder():
         # print("[finish] tool start")
         toolStart = False
 
-def networkStarter():
-    # step 1 split the SSID
-    ssid = subprocess.check_output("netsh wlan show network")
-    ssid = ssid.splitlines()
-    ssid = str(ssid)
-    ssid = ssid.split("SSID 1")[1]
-    ssid = ssid.split("Netzwerktyp")[0]
-    ssid = ssid.split(":")[1]
-    ssid = ssid.split("'")[0]
-    #print("--------------------")
-    #print(ssid)
-    #print("--------------------")
-    #print(type(ssid))
+def ssidFinder():
+    try:
+        # step 1 split the SSID
+        ssid = subprocess.check_output("netsh wlan show network")
+        ssid = ssid.splitlines()
+        ssid = str(ssid)
+        ssid = ssid.split("SSID 1")[1]
+        ssid = ssid.split("Netzwerktyp")[0]
+        ssid = ssid.split(":")[1]
+        ssid = ssid.split("'")[0]
+        #print("--------------------")
+        #print(ssid)
+        #print("--------------------")
+        #print(type(ssid))
+    except:
+        ssid = "not found new"
     return ssid
 
     # start webserver

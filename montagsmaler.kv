@@ -1,6 +1,8 @@
 WindowManager:
     WelcomePage:
+    TutorialPage:
     LobbyPage:
+    PainterPage:
 
 
 <WelcomePage>
@@ -23,14 +25,14 @@ WindowManager:
                 app.root.current = "lobby"
                 root.manager.transition.direction = "left"
 
-<LobbyPage>
+<TutorialPage>
+    wlanText: wlanTextID
     name: "lobby"
+    Painter
     BoxLayout:
         orientation: "vertical"
-        Button:
-            text: "Klick mich"
-            on_release:
-                app.showWLAN(self,root)
+        Label:
+            id: wlanTextID
         Label:
             text: "2. QR-Code Scannen"
         Label:
@@ -38,8 +40,10 @@ WindowManager:
         Label:
             text:  "4. Schliese den Browser nich!"
         Button:
-            text: "Bereit!"
+            text: "verstanden, zeige Loby!"
             on_release:
+                app.root.current = "painter"
+                root.manager.transition.direction = "left"
 
         Button:
             text: "zurueck"
@@ -47,3 +51,8 @@ WindowManager:
                 app.root.current = "welcome"
                 root.manager.transition.direction = "right"
 
+<LobbyPage>
+
+<PainterPage>
+    name: "painter"
+    Painter
