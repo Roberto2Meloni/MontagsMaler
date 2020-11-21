@@ -7,13 +7,18 @@ WindowManager:
 
 <WelcomePage>
     name: "welcome"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.png"
     BoxLayout:
         size: root.size
         pos: root.pos
         orientation: "vertical"
-        background_color: 1,0,0,1
         Label:
             name: "platzhalter"
+            background_color: 1,0,0,1
         Button:
             text: "Start"
             background_color: 0,0,1,1
