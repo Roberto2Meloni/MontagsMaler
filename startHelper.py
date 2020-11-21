@@ -51,7 +51,6 @@ def creatFolder():
 
 def ssidFinder():
     try:
-        # step 1 split the SSID
         ssid = subprocess.check_output("netsh wlan show network")
         ssid = ssid.splitlines()
         ssid = str(ssid)
@@ -67,7 +66,23 @@ def ssidFinder():
         ssid = "not found new"
     return ssid
 
-    # start webserver
+def myIPFinder():
+    try:
+        ip = subprocess.check_output("ipconfig")
+        ip = ip.splitlines()
+        ip = str(ip)
+        ip = ip.split("Drahtlos-LAN-Adapter WLAN:")[1]
+        ip = ip.split("IPv4-Adresse")[1]
+        ip = ip.split(": ")[1]
+        ip = ip.split("'")[0]
 
+        #print("--------------------")
+        #print(ip)
+        #print("--------------------")
+    except:
+        print("not found ip")
+        ip = "not found!!!"
+    return ip
 
-#networkStarter()
+def fileHandler():
+    pass

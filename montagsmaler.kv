@@ -26,13 +26,12 @@ WindowManager:
                 root.manager.transition.direction = "left"
 
 <TutorialPage>
-    wlanText: wlanTextID
     name: "lobby"
     Painter
     BoxLayout:
         orientation: "vertical"
         Label:
-            id: wlanTextID
+            text: "1. Verbinde dich mit dem WLAN"
         Label:
             text: "2. QR-Code Scannen"
         Label:
@@ -40,6 +39,7 @@ WindowManager:
         Label:
             text:  "4. Schliese den Browser nich!"
         Button:
+            orientation: "horizontal"
             text: "verstanden, zeige Loby!"
             on_release:
                 app.root.current = "painter"
@@ -47,9 +47,15 @@ WindowManager:
 
         Button:
             text: "zurueck"
+            orientation: "horizontal"
             on_release:
                 app.root.current = "welcome"
                 root.manager.transition.direction = "right"
+        Button:
+            text: "Wie lautet mein WLAN?"
+            orientation: "horizontal"
+            on_release:
+                app.whatsMyWLAN(self,root)
 
 <LobbyPage>
 

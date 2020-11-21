@@ -63,18 +63,10 @@ class TutorialPage(Screen):
 screenManager = Builder.load_file("montagsmaler.kv")
 
 class MontagsMaler(App):
-    wlanSSID = startHelper.ssidFinder()
-    foo = ("Zeile 51. Verbinde dich mit dem WLAN: " + wlanSSID)
-    wlanText = StringProperty()
-    print(foo)
 
-    #def set_text(self):
-    #    #get reverence to Label
-    #    wlanText =
-    #    print(wlanText)
-    #    # get a referent
-    #    wlanLabel = self.root.ids.wlanLabel
-    #    wlanLabel.text = wlanText
+    def whatsMyWLAN(self,Button,app):
+        wlanSSID = startHelper.ssidFinder()
+        Button.text= ("SSID: "+ wlanSSID)
 
 
     def build(self):
