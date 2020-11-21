@@ -52,7 +52,8 @@ def creatFolder():
 def networkStarter():
     cli = subprocess.call("netsh wlan show network")
     cli = str(cli)
-    ssid = cli.split("SSID 1: ")[1]
+    print(type(cli))
+    ssid = cli.split()
     # ssid = ssid.split(" ")[0]
     #print(test)
     print("Jetzt kommt die SSID")
