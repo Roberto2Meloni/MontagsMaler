@@ -1,6 +1,7 @@
 # import public
 import kivy
 from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.properties import StringProperty
@@ -17,54 +18,47 @@ import debugFunticon
 
 
 # Variabel
-swFirmware = "1.0"
+swFirmware = "1.0.1"
 localHost = "127.0.0.1"
+wlanSSID = "not found"
+
 
 # Teams
 
 # Database
 
 
-
-# Kivy Class
-indow.size = (1000, 700)
-Builder.load_string("""
-<StartPage>
-
-
-
-<WelcomePage>
-
-
-
-""")
-
-class StartPage(Screen):
+class WindowManager(ScreenManager):
     pass
 
 class WelcomePage(Screen):
+    def creatLobby(self):
+        pass
+        # sitzung erstellen (ein bischen sicherheit)
+        # generiere random sizungsnummer
+        # generiere random hash vor QR Code
+        #
+
+class LobbyPage(Screen):
     pass
 
 
-ms = ScreenManager()
-ms.add_widget(StartPage(name="StartPage"))
-ms.add_widget(WelcomePage(name="WelcomePage"))
+# Screenmanager
+screenManager = Builder.load_file("montagsmaler.kv")
 
-class StartApp(App):
+class MontagsMaler(App):
     def build(self):
-        return ms
-
-
+        return screenManager
 
 # Start Tool
 if __name__ == "__main__":
     try:
-        instanzBoot1 = startHelper.BootClass()
-        instanzBoot1.creatFolder()
+        startHelper.creatFolder()
         debugFunticon.creatLog("startHelper", swFirmware)
-        StartApp().run()
+        MontagsMaler().run()
     except Exception as e:
         debugFunticon.debug(localHost, "Start Tool", str(e))
+        print(str(e))
     # start webserver
     # verifai Netzwork
     # create QR Code

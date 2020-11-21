@@ -1,0 +1,33 @@
+WindowManager:
+    WelcomePage:
+    LobbyPage:
+
+
+<WelcomePage>
+    name: "welcome"
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        background_color: 1,0,0,1
+        Label:
+            name: "platzhalter"
+        Button:
+            text: "Start"
+            background_color: 0,0,1,1
+            size_hint_x: 1
+            size_hint_y: 0.25
+            font_size: 120
+            on_release:
+                text: "Spiel wird erstellt, bitte warten!"
+                time.sleep
+                app.root.current = "lobby"
+                root.manager.transition.direction = "left"
+
+<LobbyPage>
+    name: "lobby"
+    Button:
+        text: "Zurück"
+        on_release:
+            app.root.current = "welcome"
+            root.manager.transition.direction = "right"
