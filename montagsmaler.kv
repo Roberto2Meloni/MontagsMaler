@@ -20,14 +20,30 @@ WindowManager:
             font_size: 120
             on_release:
                 text: "Spiel wird erstellt, bitte warten!"
-                time.sleep
                 app.root.current = "lobby"
                 root.manager.transition.direction = "left"
 
 <LobbyPage>
     name: "lobby"
-    Button:
-        text: "Zurück"
-        on_release:
-            app.root.current = "welcome"
-            root.manager.transition.direction = "right"
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            text: "Klick mich"
+            on_release:
+                app.showWLAN(self,root)
+        Label:
+            text: "2. QR-Code Scannen"
+        Label:
+            text: "3. Erstelle dein Benutzer und deine Fragen"
+        Label:
+            text:  "4. Schliese den Browser nich!"
+        Button:
+            text: "Bereit!"
+            on_release:
+
+        Button:
+            text: "zurueck"
+            on_release:
+                app.root.current = "welcome"
+                root.manager.transition.direction = "right"
+

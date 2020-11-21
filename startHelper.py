@@ -50,16 +50,21 @@ def creatFolder():
         toolStart = False
 
 def networkStarter():
-    cli = subprocess.call("netsh wlan show network")
-    cli = str(cli)
-    print(type(cli))
-    ssid = cli.split()
-    # ssid = ssid.split(" ")[0]
-    #print(test)
-    print("Jetzt kommt die SSID")
-    print(ssid)
-    # WLAN SSID return
+    # step 1 split the SSID
+    ssid = subprocess.check_output("netsh wlan show network")
+    ssid = ssid.splitlines()
+    ssid = str(ssid)
+    ssid = ssid.split("SSID 1")[1]
+    ssid = ssid.split("Netzwerktyp")[0]
+    ssid = ssid.split(":")[1]
+    ssid = ssid.split("'")[0]
+    #print("--------------------")
+    #print(ssid)
+    #print("--------------------")
+    #print(type(ssid))
+    return ssid
+
     # start webserver
 
 
-networkStarter()
+#networkStarter()

@@ -47,6 +47,9 @@ class LobbyPage(Screen):
 screenManager = Builder.load_file("montagsmaler.kv")
 
 class MontagsMaler(App):
+    def showWLAN(self,button,app):
+        button.text = "1. Verbinde dich mit dem WLAN: " + wlanSSID
+
     def build(self):
         return screenManager
 
@@ -54,6 +57,7 @@ class MontagsMaler(App):
 if __name__ == "__main__":
     try:
         startHelper.creatFolder()
+        wlanSSID = startHelper.networkStarter()
         debugFunticon.creatLog("startHelper", swFirmware)
         MontagsMaler().run()
     except Exception as e:
