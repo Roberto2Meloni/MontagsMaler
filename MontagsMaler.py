@@ -16,8 +16,8 @@ from kivy.core.window import Window
 from kivy.uix.textinput import TextInput
 
 # import privat
-import helpderFuntcionGame
-import debugFunticon
+import helperFunctionGame
+import debugFunction
 
 
 # Variabel
@@ -65,7 +65,7 @@ screenManager = Builder.load_file("montagsmaler.kv")
 class MontagsMaler(App):
 
     def whatsMyWLAN(self,Button,app):
-        wlanSSID = helpderFuntcionGame.ssidFinder()
+        wlanSSID = helperFunctionGame .ssidFinder()
         Button.text = ("SSID: "+ wlanSSID)
 
 
@@ -75,12 +75,10 @@ class MontagsMaler(App):
 # Start Tool
 if __name__ == "__main__":
     try:
-        helpderFuntcionGame.creatFolder()
-        debugFunticon.creatLog("helpderFuntcionGame", swFirmware)
-        helpderFuntcionGame.delOldFiles()
+        helperFunctionGame.appBootFunction(swFirmware)
         MontagsMaler().run()
     except Exception as e:
-        debugFunticon.debug(localHost, "Start Tool", str(e))
+        debugFunction.debug(localHost, "Start Tool", str(e))
         print(str(e))
     # start webserver
     # verifai Netzwork

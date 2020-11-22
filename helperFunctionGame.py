@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 from datetime import datetime
+import debugFunction
 import time
 
 # Variabel
@@ -202,7 +203,11 @@ def lobbyTeamCreater():
         #    time.sleep(2)
 
 
-
+def appBootFunction(swFirmware):
+    creatFolder()
+    debugFunction.creatLog("helpderFuntcionGame", swFirmware)
+    delOldFiles()
+    lobbyFileCreater()
 
 
 
@@ -214,4 +219,4 @@ def lobbyTeamCreater():
 #lobbyUserCreater("Nik","3","192.168.1.3")
 #lobbyUserCreater("Maria","4","192.168.1.4")
 
-lobbyTeamCreater()
+#lobbyTeamCreater()
