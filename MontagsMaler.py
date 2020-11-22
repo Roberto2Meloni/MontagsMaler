@@ -66,7 +66,7 @@ class MontagsMaler(App):
 
     def whatsMyWLAN(self,Button,app):
         wlanSSID = startHelper.ssidFinder()
-        Button.text= ("SSID: "+ wlanSSID)
+        Button.text = ("SSID: "+ wlanSSID)
 
 
     def build(self):

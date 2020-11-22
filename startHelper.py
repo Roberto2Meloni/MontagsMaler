@@ -51,12 +51,11 @@ def creatFolder():
 
 def ssidFinder():
     try:
-        ssid = subprocess.check_output("netsh wlan show network")
+        ssid = subprocess.check_output("netsh wlan show interfaces")
         ssid = ssid.splitlines()
         ssid = str(ssid)
-        ssid = ssid.split("SSID 1")[1]
-        ssid = ssid.split("Netzwerktyp")[0]
-        ssid = ssid.split(":")[1]
+        ssid = ssid.split("SSID")[1]
+        ssid = ssid.split(": ")[1]
         ssid = ssid.split("'")[0]
         #print("--------------------")
         #print(ssid)
@@ -85,4 +84,7 @@ def myIPFinder():
     return ip
 
 def fileHandler():
+    # ID/Username /Q1/Q2/Q3/Q4/Q5
     pass
+
+ssidFinder()
