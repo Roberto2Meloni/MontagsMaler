@@ -27,12 +27,12 @@ WindowManager:
             font_size: 120
             on_release:
                 text: "Spiel wird erstellt, bitte warten!"
-                app.root.current = "lobby"
+                app.root.current = "tutorial"
                 root.manager.transition.direction = "left"
+                helperFunctionGame.lobbyFileCreater()
 
 <TutorialPage>
-    name: "lobby"
-    Painter
+    name: "tutorial"
     BoxLayout:
         orientation: "vertical"
         Label:
@@ -47,7 +47,7 @@ WindowManager:
             orientation: "horizontal"
             text: "verstanden, zeige Loby!"
             on_release:
-                app.root.current = "painter"
+                app.root.current = "lobby"
                 root.manager.transition.direction = "left"
 
         Button:
@@ -63,6 +63,22 @@ WindowManager:
                 app.whatsMyWLAN(self,root)
 
 <LobbyPage>
+    name: "lobby"
+    BoxLayout
+        orientation: "vertical"
+        Label:
+            text: "Lobby"
+            font_size: 30
+            halign: 'left'
+            valign: 'middle'
+            size_hint: (1,0.25)
+        Label:
+            name: "platzhalter"
+        Button:
+            text: "Lobby ist bereit!"
+            size_hint_x: 1
+            size_hint_y: 0.25
+            font_size: 60
 
 <PainterPage>
     name: "painter"
