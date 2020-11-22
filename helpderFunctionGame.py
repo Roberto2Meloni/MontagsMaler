@@ -152,14 +152,20 @@ def lobbyFileCreater():
     file5 = open(str(pathTempNew) + "/" + str(allQ4Red ), "a")
     file5.write("Creat File 4 allQ4Red \n")
 
-def lobbyUserCreater(Name,id):
+def lobbyUserCreater(Name,id,ip):
     file1 = open(str(pathTempNew) + "/" + str(allUser), "a")
     file1.write(Name)
     file1.write("/")
     file1.write(id)
+    file1.write("/")
+    file1.write(ip)
+    file1.write("!!")
     file1.write("\n")
 
 def lobbyTeamCreater():
+    people = []
+    finish = True
+
     # take all user from allUser File (zeile für zeile) an put it in a team random!
     # for x in userlist
     file1 = open(str(pathTempNew) + "/" + str(allUser), "a")
@@ -168,28 +174,44 @@ def lobbyTeamCreater():
 
     # strip file that just the Teammeads avilebar are
     foo = file1.read()
-    print("datei wird nun gprintet")
-    print(foo)
-    mainFile = foo.strip("Creat File 4 all user")
+    mainFile = str(foo)
+    mainFile = mainFile.strip("Creat File 4 all user\n")
     mainFile = mainFile.strip("Stopp adding new user, creat Teamlist")
+    mainFile = mainFile.splitlines()
     print("MainFile:")
     print(mainFile)
+    print(type(mainFile))
+    mainFile = str(mainFile)
+    print("Wie ist es jetzt")
+    print(type(mainFile))
 
-    #for x in(mainFile):
-    foo = mainFile.strip("")
-    foo = mainFile.rstrip("\n")
-    print("nur noch foo")
-    print(foo)
+    allPeople = mainFile
+    print(allPeople)
+    allPeople = allPeople.strip("1")[0]
+    print(allPeople)
+
+    #while finish==True:
+    #    allPeople = mainFile
+    #    print(allPeople)
+    #    pass
+    #    allPeople = allPeople.strip(", '")[1]
+    #    print()
+    #    #for x in allPeople:
+        #    people = allPeople.strip("!")[0]
+        #    print(people)
+        #    time.sleep(2)
+
+
 
 
 
 
 #ssidFinder()
-delOldFiles()
-lobbyFileCreater()
-lobbyUserCreater("Roberto","1")
-lobbyUserCreater("Fabio","2")
-lobbyUserCreater("Nik","3")
-lobbyUserCreater("Maria","4")
+#delOldFiles()
+#lobbyFileCreater()
+#lobbyUserCreater("Roberto","1","192.168.1.1")
+#lobbyUserCreater("Fabio","2","192.168.1.2")
+#lobbyUserCreater("Nik","3","192.168.1.3")
+#lobbyUserCreater("Maria","4","192.168.1.4")
 
 lobbyTeamCreater()
