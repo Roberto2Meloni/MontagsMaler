@@ -1,0 +1,106 @@
+ScreenManager:
+    WelcomePage:
+    TutorialPage:
+    LobbyPage:
+    PainterPage:
+
+<WelcomePage>:
+    name: "WelcomePageKV"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.jpeg"
+
+    BoxLayout:
+        Label:
+            name:"platzhalter"
+            size_hint_x: 0.01
+            size_hint_y: 0.15
+        MDRaisedButton:
+            text: "START"
+            font_size:40
+            size_hint_x: 0.9
+            size_hint_y: 0.15
+            on_release:
+                root.pressStart()
+                root.manager.current = "TutorialPageKV"
+                root.manager.transition.direction = "left"
+        Label:
+            name:"platzhalter"
+            size_hint_x: 0.01
+            size_hint_y: 0.15
+
+
+<TutorialPage>:
+    name:"TutorialPageKV"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "background.jpeg"
+    GridLayout:
+        cols:1
+        MDToolbar:
+            title: "Anleitung"
+    BoxLayout:
+        cols: 2
+        spacing:10
+        padding: 40
+        MDLabel:
+            text: root.hinweiss
+            pos: self.pos
+            font_size:30
+        Label:
+            name: "QR-Code"
+            Image:
+                center: self.parent.center
+                size_hint: 400,400
+                source: root.imgSource
+    BoxLayout:
+        Label:
+            name:"platzhalter"
+            size_hint_x: 0.01
+            size_hint_y: 0.15
+        MDRaisedButton:
+            text: "Beenden"
+            font_size:40
+            size_hint_x: .5
+            size_hint_y: 0.15
+            on_release: root.pressBeenden()
+        Label:
+            name:"platzhalter"
+            size_hint_x: 0.01
+            size_hint_y: 0.15
+        MDRaisedButton:
+            text: "Zurück"
+            font_size:40
+            size_hint_x: .5
+            size_hint_y: 0.15
+            on_release:
+                root.manager.current = "startKV"
+                root.manager.transition.direction = "right"
+                root.pressBack()
+        Label:
+            name:"platzhalter"
+            size_hint_x: 0.01
+            size_hint_y: 0.15
+        MDRaisedButton:
+            text: "Verstanden"
+            font_size:40
+            size_hint_x: .5
+            size_hint_y: 0.15
+            on_release:
+                root.manager.current = "anleitungKV"
+                root.pressShowLobby()
+        Label:
+            name:"platzhalter"
+            size_hint_x: 0.01
+            size_hint_y: 0.15
+            pos_hint_y: 0.01
+
+<LobbyPage>:
+    name: "LobbyPageKV"
+
+<PainterPage>:
+    name: "PainterPageKV"

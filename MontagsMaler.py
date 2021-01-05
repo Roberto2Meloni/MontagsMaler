@@ -1,88 +1,289 @@
 # import public
-import kivy
-from kivy.app import App
-from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.graphics import Line
-from kivy.uix.widget import Widget
-from kivy.properties import StringProperty
-import webbrowser
-from kivy.uix.label import Label
-from kivy.properties import ObjectProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.popup import Popup
-from kivy.core.window import Window
-from kivy.uix.textinput import TextInput
+from random import choice
+import sys
+from flask import Flask, request, url_for, render_template
+from OpenSSL import SSL
+import os
+import threading
+
+
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
+from PyQt5.uic import loadUi
+
 
 # import privat
-import helperFunctionGame
 import debugFunction
-
+import helperFunctionGame
 
 # Variabel
 swFirmware = "1.0.1"
 localHost = "127.0.0.1"
+serverIP = "0.0.0.0"
 wlanSSID = "not found"
+debugFileName = "MontagsMaler.py"
+context = SSL.Context(SSL.TLSv1_2_METHOD)
+app = Flask(__name__)
+new_environ = os.environ.copy()
+folderName = "MontagsMaler"
+pathTemp = R"${TEMP}/" + folderName
+pathTempNew = os.path.expandvars(pathTemp)
+qrCodeFile = "webServerQR.png"
+varClass = "no Class"
 
 
-# Teams
 
-# Database
+helperFunctionGame.appBootFunction(swFirmware)
+# muss hier das debuging erstellen, ansonsten passiert das:
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [/// Log: START Function [ssidFinder] ]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [+++ Try: splitt ssid]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [/// Log: return SSID 3Unbekannt]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [/// Log: END Function [ssidFinder]]
+# [2020-12-21 21:23:52.017477]   [----------]   [----------]   [----------]   [----------]   [----------]
+# [2020-12-21 21:23:52.017477]   [IP - Adress]   [File Name]   [Class Name]   [Function Name]   [Message Typ]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [debugFunction.py]   [no Class]   [creatLog]   [/// Log: Continue log file]
 
-class Painter(Widget):
-
-    def on_touch_down(self, touch):
-        with self.canvas:
-            touch.ud["line"] = Line(points=(touch.x, touch.y))
-
-    def on_touch_move(self, touch):
-        touch.ud["line"].points += [touch.x, touch.y]
-
-class PainterPage(Screen):
-    pass
-
-class WindowManager(ScreenManager):
-    pass
-
-class WelcomePage(Screen):
-    pass
-    # sitzung erstellen (ein bischen sicherheit)
-    # generiere random sizungsnummer
-    # generiere random hash vor QR Code
-    #
-
-class LobbyPage(Screen):
-    pass
-
-class TutorialPage(Screen):
-    pass
+# Pages Class
 
 
-# Screenmanager
-screenManager = Builder.load_file("montagsmaler.kv")
+class WelcomePage(QMainWindow):
+    # from Template
+    varClass = "WelcomePage(QMainWindow)"
+    def defaultFunction(self):
+        # CLASS INIT
+        # from Template
+        varFunction = "defaultFunction"
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log:")
 
-class MontagsMaler(App):
+        # ERROR
+        # from Template if tool is going down
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: ")
 
-    def whatsMyWLAN(self,Button,app):
-        wlanSSID = helperFunctionGame .ssidFinder()
-        Button.text = ("SSID: "+ wlanSSID)
+        # TRY
+        # from Template if tool is going try
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: ")
+
+        # EXCEPT
+        # from Template if tool is going except
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: ")
+
+        # PRESS BUTTON
+        # from Template if tool is going press Button
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "~~~ Press Button: ")
+
+        # WHILE
+        # from Template if tool is going while
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1/2 WHILE: ")
+
+        # FOR
+        # from Template if tool is going for
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1-2 FOR: ")
+
+    def __init__(self):
+        # CLASS INIT
+        # from Template
+        varFunction = "__init__"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Start Init Gui")
+        super(WelcomePage, self).__init__()
+        uic.loadUi("PyQT/01WelcomePage.ui", self)
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Loading Gui success")
+
+        # all Button
+        self.btn_Start.clicked.connect(self.gotoTutPage)
+
+        # Background Image
+        #self.MainWindow.setPixmap("background.jpeg")
 
 
-    def build(self):
-        return screenManager
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
+
+
+    def gotoTutPage(self):
+        varFunction = "gotoTutPage"
+        myPages.setCurrentIndex(myPages.currentIndex()+1)
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Start]")
+
+
+class TutorialPage(QWidget):
+    varClass = "TutorialPage(QWidget)"
+
+    def __init__(self):
+        varFunction = "__init__"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Start Init Gui")
+
+        super(TutorialPage, self).__init__()
+        loadUi("PyQT/02TutorialPage.ui", self)
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Loading Gui success")
+
+        # all Button to push
+        self.btn_Zurueck.clicked.connect(self.gotoWelPage)
+        self.btn_Beenden.clicked.connect(self.close)
+        self.btn_Weiter.clicked.connect(self.gotoLobPage)
+
+        # QR Code Image
+        self.qrCode.setPixmap(QtGui.QPixmap(pathTempNew + "/" + qrCodeFile))
+
+        # output the ssid
+        onlySSID = helperFunctionGame.ssidFinder()
+        string = "1. Verbinde dich mit dem WLAN [" + onlySSID + "]\n\n2. QR-Code Scannen\n\n3. Erstelle dein Benutzer\n\n4. Schliese den Browser nich!"
+        self.label_tut.setText(string)
+
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
+
+    def gotoWelPage(self):
+        print("hello")
+        varFunction = "gotoWelPage"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Zurück]")
+        myPages.setCurrentIndex(myPages.currentIndex() - 1)
+
+    def close(self):
+        varFunction = "close"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Beenden]")
+        helperFunctionGame.killProgramm("TutorialPage")
+
+    def gotoLobPage(self):
+        varFunction = "gotoLobPage"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction,"~~~ Press Button: [Weiter]")
+        myPages.setCurrentIndex(myPages.currentIndex() +1)
+
+class LobbyPage(QWidget):
+    varClass = "LobbyPage(QWidget)"
+
+    def __init__(self):
+        varFunction = "__init__"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Start Init Gui")
+        super(LobbyPage, self).__init__()
+        loadUi("PyQT/03LobbyPage.ui", self)
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Loading Gui success")
+
+        # all Button to push
+        self.btn_Zurueck.clicked.connect(self.gotoTutPage)
+        self.btn_Update.clicked.connect(self.update)
+        self.btn_Weiter.clicked.connect(self.gotoTeamPage)
+
+        # QR Code Image
+        self.qrCode.setPixmap(QtGui.QPixmap(pathTempNew + "/" + qrCodeFile))
+
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
+
+    def gotoTutPage(self):
+        varFunction = "gotoTutPage"
+        myPages.setCurrentIndex(myPages.currentIndex() - 1)
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Zurueck]")
+
+    def update(self):
+        varFunction = "update"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Aktualisieren]")
+        try:
+            userListSQL = helperFunctionGame.lobbyUserShow()
+            zSpieler = len(userListSQL)
+            print("userlist Ok")
+            #self.playerView.setObjectName(_fromUtf8("listView"))
+
+            model = QtGui.QStandardItemModel()
+            print("model ok")
+            self.playerView.setModel(model)
+            #self.playerView.setColumnCount(zSpieler%10)
+            print("playerView ok")
+
+            for i in userListSQL:
+                item = QtGui.QStandardItem(i)
+                model.appendRow(item)
+
+            self.verbSpieler.setText("Verbundene Spieler: " + str(zSpieler))
+        except Exception as error:
+            print(str(error))
+
+
+
+        #self.playerView
+
+    def gotoTeamPage(self):
+        varFunction = "gotoTeamPage"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Aktualisieren]")
+
+
+
+# API Web Flask
+@app.route("/")
+def index():
+    return render_template("index.html", webServer=serverIP)
+
+
+@app.route("/loginUser")
+def hallo():
+    return render_template("loginUser.html", webServer=serverIP)
+
+
+@app.route("/creatUserInWeb", methods=["POST", "GET"])
+def creatUserInWeb():
+    name = ""
+    if request.method == "POST":
+        name = request.form["name"]
+        password = request.form["password"]
+        remotIP = request.environ['REMOTE_ADDR']
+        print("der Name von Web lautet: " + name)
+        print("Das pw lautet: " + password)
+        helperFunctionGame.lobbyUserCreater(name, remotIP, password)
+    else:
+        name = request.args.get("name")
+    return render_template("creatUserInWeb.html", newUserName=name, webServer=serverIP)
+
+
+def startWebServer():
+    # from Template
+    varFunction = "startWebServer"
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: RUN Webserver on Port 1818!")
+    app.run(host=serverIP, ssl_context='adhoc', port=1818, debug=False)
+
 
 # Start Tool
 if __name__ == "__main__":
+    # from Template
+    varFunction = "__main__"
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START function")
+
+    guiApp = QtWidgets.QApplication(sys.argv)
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: Creat App")
+    myPages = QtWidgets.QStackedWidget()
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: Creat Stacked Widget")
+
+    # all Pages
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: Creat Page shurtCut")
+    welcomePage = WelcomePage()
+    tutorialPage = TutorialPage()
+    lobbyPage = LobbyPage()
+
+    # add Pages to StackeWidget
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: add Widgets to Stacked Widget")
+    myPages.addWidget(welcomePage)
+    myPages.addWidget(tutorialPage)
+    myPages.addWidget(lobbyPage)
+
+
+
+    # TRY
+    # from Template if tool is going try
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: ONE")
     try:
-        helperFunctionGame.appBootFunction(swFirmware)
-        MontagsMaler().run()
+        serverIP = helperFunctionGame.myIPFinder()
+        if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+            webServerProcess = threading.Thread(target=startWebServer, daemon=True).start()
+        helperFunctionGame.testCreatNewUser()
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: finish creat test users!")
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: show Welcome Page!")
+        myPages.show()
     except Exception as e:
-        debugFunction.debug(localHost, "Start Tool", str(e))
+        # from Template if tool is going except
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: ONE")
+        # from Template if tool is going down
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: " + str(e))
         print(str(e))
-    # start webserver
+    print("fertig mit try")
+    sys.exit(guiApp.exec_())
+    # start webserver and gui
     # verifai Netzwork
-    # create QR Code
+    # start sqlite Database
     # clear the rule for this Game
     # clear all old Date in temp folder
     # what do the user?
@@ -90,6 +291,56 @@ if __name__ == "__main__":
     # send the command for the User
     # show in gui how is now on goin to paint
     # faild the user?
-    # creat Teams
     # creat Date for Question to paint
     # foting for enemi team
+
+
+# Templates
+class Default0():
+
+    # from Template
+    varClass = "Default0()"
+
+
+    def defaultFunction(self):
+        # CLASS INIT
+        # from Template
+        varFunction = "defaultFunction"
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log:")
+
+        # ERROR
+        # from Template if tool is going down
+        #debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: ")
+
+        # TRY
+        # from Template if tool is going try
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: ")
+
+        # EXCEPT
+        # from Template if tool is going except
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: ")
+
+        # PRESS BUTTON
+        # from Template if tool is going press Button
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "~~~ Press Button: ")
+
+        # WHILE
+        # from Template if tool is going while
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1/2 WHILE: ")
+
+        # FOR
+        # from Template if tool is going for
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1-2 FOR: ")
+
+        # API Web Flask
+        # from Template if tool is going except
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: ")
+
+        # FOR
+        # from Template if tool is going for
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1-2 FOR: ")
+
+    pass
+        #@app.route("/")
+        #def index():
+        #    return render_template("index.html", webServer=serverIP)

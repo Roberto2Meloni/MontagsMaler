@@ -1,8 +1,11 @@
 import os
-import sys
 import subprocess
 from datetime import datetime
 import debugFunction
+import sqlite3
+import qrcode
+import multiprocessing
+import sys
 import time
 
 # Variabel
@@ -10,15 +13,15 @@ swFirmware = "helperFunctionGame SW: 1.0"
 pathTemp = R"${TEMP}/MontagsMaler"
 pathTempNew = os.path.expandvars(pathTemp)
 now = datetime.now()
+dataBase = "DataBase.db"
+qrCodeFile = "webServerQR.png"
+varClass = "no Class"
+localHost = "127.0.0.1"
+debugFileName = "helperFunctionGame.py"
+people = list()
 
-allUser = "allUserFile.txt"
-teamBlue = "teamBlue.txt"
-teammRed = "teamRed.txt"
-allQ4Blue = "allQ4Blue.txt"
-allQ4Red = "allQ4Red.txt"
-
-# System Start helper
 def creatFolder():
+    varFunction = "defaultFunction"
     # variabel
     folderName = "MontagsMaler"
     pathTemp = R"${TEMP}/" + folderName
@@ -62,8 +65,39 @@ def creatFolder():
         # print("[finish] tool start")
         toolStart = False
 
+creatFolder()
+
+def checkDataBase():
+    #Database
+    if os.path.isfile(pathTempNew + "/" + dataBase):
+        os.remove(pathTempNew + "/" + dataBase)
+    else:
+        pass
+    sql = """CREATE TABLE IF NOT EXISTS person (id integer Primary Key,name text, password text, ip text, team text, begriff1, begriff2, begriff3)"""
+
+    if os.path.isfile(pathTempNew + "/" + dataBase):
+        print("Datebnbank exisiter jetzt")
+    else:
+        pass
+    connection = sqlite3.connect(pathTempNew + "/" + dataBase)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    cursor.close()
+    connection.commit()
+    return sql
+
+sql = checkDataBase()
+
+#debugFunction.debug(localHost, debugFileName, "no Class", "lobbyFileCreater", "sqlite Database exist now")
+
+
+
 def ssidFinder():
+    varFunction = "ssidFinder"
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [ssidFinder] ")
+
     try:
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: splitt ssid")
         ssid = subprocess.check_output("netsh wlan show interfaces")
         ssid = ssid.splitlines()
         ssid = str(ssid)
@@ -74,11 +108,19 @@ def ssidFinder():
         #print(ssid)
         #print("--------------------")
         #print(type(ssid))
-    except:
-        ssid = "not found new"
+    except Exception as error:
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: cant't find ssid!!!")
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: " +str(error))
+        ssid = "not found ssid!!! watch log files"
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("/// Log: return SSID " + ssid))
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: END Function [ssidFinder]")
     return ssid
 
 def myIPFinder():
+    varFunction = "myIPFinder"
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [myIPFinder] ")
+
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: finding LAN IP")
     try:
         ip = subprocess.check_output("ipconfig")
         ip = ip.splitlines()
@@ -91,132 +133,226 @@ def myIPFinder():
         #print("--------------------")
         #print(ip)
         #print("--------------------")
-    except:
+    except Exception as error:
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: Can't find IP Adress!!!")
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("!!! Error: " + str(error)))
         print("not found ip")
         ip = "not found!!!"
+    debugFunction.debug(localHost,debugFileName, varClass, varFunction, ("/// Log: return ip: " + ip))
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: End Function [myIPFinder] ")
     return ip
 
-def delOldFiles():
-    # deleat in temp folder all files except the log file
-    # QR code
-    # all User with id
-    if os.path.isfile(pathTempNew + "/" + allUser):
-        os.remove(pathTempNew + "/" + allUser)
+def killProgramm(fromField):
+    varFunction = "killProgramm"
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [killProgramm] ")
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("/// Log:Start killing Programm from: " + fromField))
+    sys.exit()
+
+def lobbyUserCreater(varName, varPassword, varIP):
+    # from Template
+    varFunction = "lobbyUserCreater"
+    conn = sqlite3.connect(pathTempNew + "/" + dataBase)
+    curs = conn.cursor()
+    curs.execute(sql)
+
+    # print(type(varName))
+    # print(varName)
+    # print("---------")
+    # print(type(varIP))
+    # print(varIP)
+
+    conn.execute("INSERT INTO person(name, ip, password) VALUES(?,?,?)", (varName, varIP,varPassword))
+    curs.close()
+    conn.commit()
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: In SQL creat new User: " + varName)
+
+def lobbyUserShow():
+    conn = sqlite3.connect(pathTempNew + "/" + dataBase)
+    curs = conn.cursor()
+    curs.execute(sql)
+    userList = []
+
+    curs.execute("SELECT name from 'person'")
+    row = curs.fetchone()
+    while row is not None:
+        name = row[0]
+        userList.append(name)
+        row = curs.fetchone()
+
+    curs.close()
+    conn.commit()
+    debugFunction.debug(localHost, debugFileName, "no Class", "lobbyUserShow", ("Update Userlist"))
+    return userList
+
+def lobbyTeamCreaterCompleat():
+    conn = sqlite3.connect(pathTempNew + "/" + dataBase)
+    curs = conn.cursor()
+    curs.execute(sql)
+    userList = {}
+
+    curs.execute("SELECT id, name from 'person'")
+    row = curs.fetchone()
+    while row is not None:
+        userid = row[0]
+        userName = row[1]
+        foo = {userid: userName}
+        userList.update(foo)
+        row = curs.fetchone()
+
+
+    curs.close()
+    conn.commit()
+    debugFunction.debug(localHost, debugFileName, "no Class", "lobbyTeamCreater", ("Update Userlist withe ID"))
+    return userList
+
+def addUsert2Team(varID, varTeam):
+    varIDnew = int(varID)
+
+
+    conn = sqlite3.connect(pathTempNew + "/" + dataBase)
+    curs = conn.cursor()
+    curs.execute(sql)
+
+    # add Team name in the SQL
+    conn.execute("UPDATE person SET team = ? WHERE id = ?", (varTeam, varIDnew))
+
+    conn.commit()
+    curs.close()
+    debugFunction.debug(localHost, debugFileName, "no Class", "addUsert2Team", ("Add ID: " + varID + " to Team " + varTeam))
+
+
+def lobbyTeamCreaterID():
+    conn = sqlite3.connect(pathTempNew + "/" + dataBase)
+    curs = conn.cursor()
+    curs.execute(sql)
+    userListID = []
+
+    curs.execute("SELECT id from 'person'")
+    row = curs.fetchone()
+    while row is not None:
+        userid = str(row[0])
+        userListID.append(userid)
+        row = curs.fetchone()
+
+
+    curs.close()
+    conn.commit()
+    debugFunction.debug(localHost, debugFileName, "no Class", "lobbyTeamCreater", ("Update Userlist withe ID:"))
+    return userListID
+
+
+def creatQR():
+    # CLASS INIT
+    # from Template
+    varFunction = "creatQR"
+    serverIP = myIPFinder()
+    input_data = "https://"+serverIP+":1818/"
+
+    if os.path.isfile(pathTempNew + "/" + qrCodeFile):
+        os.remove(pathTempNew + "/" + qrCodeFile)
     else:
-        print("The file does not exist")
+        pass
 
-    # team blue file
-    if os.path.isfile(pathTempNew + "/" + teamBlue ):
-        os.remove(pathTempNew + "/" + teamBlue )
-    else:
-        print("The file does not exist")
+    # Creating an instance of qrcode
+    qr = qrcode.QRCode(
+        version=1,
+        box_size=10,
+        border=5)
 
-    # team red file
-    if os.path.isfile(pathTempNew + "/" + teammRed ):
-        os.remove(pathTempNew + "/" + teammRed )
-    else:
-        print("The file does not exist")
+    qr.add_data(input_data)
+    qr.make(fit=True)
 
-    # all question for blue
-    if os.path.isfile(pathTempNew + "/" + allQ4Blue ):
-        os.remove(pathTempNew + "/" + allQ4Blue )
-    else:
-        print("The file does not exist")
-
-    # all question for red
-    if os.path.isfile(pathTempNew + "/" + allQ4Red ):
-        os.remove(pathTempNew + "/" + allQ4Red )
-    else:
-        print("The file does not exist")
-
-def lobbyFileCreater():
-    # creat all files in temp folder!
-    # creat QR-Code
-
-    # all User with id and IP
-    file1 = open(str(pathTempNew) + "/" +str(allUser ), "a")
-    file1.write("Creat File 4 all user\n")
-
-    # team blue file
-    file2 = open(str(pathTempNew) + "/" + str(teamBlue ), "a")
-    file2.write("Creat File 4 teamBlue \n")
-
-    # team red file
-    file3 = open(str(pathTempNew) + "/" + str(teammRed ), "a")
-    file3.write("Creat File 4 teammRed \n")
-
-    # all question for blue
-    file4 = open(str(pathTempNew) + "/" + str(allQ4Blue ), "a")
-    file4.write("Creat File 4 allQ4Blue \n")
-
-    # all question for red
-    file5 = open(str(pathTempNew) + "/" + str(allQ4Red ), "a")
-    file5.write("Creat File 4 allQ4Red \n")
-
-def lobbyUserCreater(Name,id,ip):
-    file1 = open(str(pathTempNew) + "/" + str(allUser), "a")
-    file1.write(Name)
-    file1.write("/")
-    file1.write(id)
-    file1.write("/")
-    file1.write(ip)
-    file1.write("!!")
-    file1.write("\n")
-
-def lobbyTeamCreater():
-    people = []
-    finish = True
-
-    # take all user from allUser File (zeile für zeile) an put it in a team random!
-    # for x in userlist
-    file1 = open(str(pathTempNew) + "/" + str(allUser), "a")
-    file1.write("Stopp adding new user, creat Teamlist")
-    file1 = open(str(pathTempNew) + "/" + str(allUser), "r")
-
-    # strip file that just the Teammeads avilebar are
-    foo = file1.read()
-    mainFile = str(foo)
-    mainFile = mainFile.strip("Creat File 4 all user\n")
-    mainFile = mainFile.strip("Stopp adding new user, creat Teamlist")
-    mainFile = mainFile.splitlines()
-    print("MainFile:")
-    print(mainFile)
-    print(type(mainFile))
-    mainFile = str(mainFile)
-    print("Wie ist es jetzt")
-    print(type(mainFile))
-
-    allPeople = mainFile
-    print(allPeople)
-    allPeople = allPeople.strip("1")[0]
-    print(allPeople)
-
-    #while finish==True:
-    #    allPeople = mainFile
-    #    print(allPeople)
-    #    pass
-    #    allPeople = allPeople.strip(", '")[1]
-    #    print()
-    #    #for x in allPeople:
-        #    people = allPeople.strip("!")[0]
-        #    print(people)
-        #    time.sleep(2)
-
+    img = qr.make_image(fill='black', back_color='white')
+    img.save((pathTempNew + "/" + qrCodeFile))
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: QR-Code creat an save in temp Folder")
 
 def appBootFunction(swFirmware):
-    creatFolder()
+    # from Template
+    varFunction = "appBootFunction"
+    #creatFolder()
+    #checkDataBase()
     debugFunction.creatLog("helpderFuntcionGame", swFirmware)
-    delOldFiles()
-    lobbyFileCreater()
+    creatQR()
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: Finish all boot Function")
 
 
 
-#ssidFinder()
-#delOldFiles()
 #lobbyFileCreater()
-#lobbyUserCreater("Roberto","1","192.168.1.1")
-#lobbyUserCreater("Fabio","2","192.168.1.2")
-#lobbyUserCreater("Nik","3","192.168.1.3")
-#lobbyUserCreater("Maria","4","192.168.1.4")
+def testCreatNewUser():
+    lobbyUserCreater("Roberto","IEMIE","192.168.1.1")
+    lobbyUserCreater("Fabio","EAE","192.168.1.2")
+    lobbyUserCreater("te","EAE","192.168.1.2")
+    lobbyUserCreater("te","EAE","192.168.1.2")
+    lobbyUserCreater("te","EAE","192.168.1.2")
+    lobbyUserCreater("te","EAE","192.168.1.2")
+    lobbyUserCreater("te","EAE","192.168.1.2")
+    lobbyUserCreater("te","EAE","192.168.1.2")
+    lobbyUserCreater("te","EAE","192.168.1.2")
+    lobbyUserCreater("Fabceio","EAE","192.168.1.2")
+    lobbyUserCreater("ae","EAE","192.168.1.2")
+    lobbyUserCreater("ae","EAE","192.168.1.2")
+    lobbyUserCreater("ae","EAE","192.168.1.2")
+    lobbyUserCreater("ae","EAE","192.168.1.2")
+    lobbyUserCreater("ae","EAE","192.168.1.2")
+    lobbyUserCreater("ae","EAE","192.168.1.2")
+    lobbyUserCreater("ae","EAE","192.168.1.2")
+    lobbyUserCreater("caec","EAE","192.168.1.2")
+    lobbyUserCreater("eaea","EAE","192.168.1.2")
+    lobbyUserCreater("hh","IMIE88","192.168.1.3")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4")
+    lobbyUserCreater("eae","lmce558","192.168.1.4")
+    lobbyUserCreater("hkhhi","lmce558","192.168.1.4")
 
-#lobbyTeamCreater()
+
+
+# Templates
+class Default0():
+
+    # from Template
+    varClass = "Default0()"
+
+    # from Template
+    # debugFunction.debug(localHost, debugFileName, varClass, "class", "### Log: Class [Default]")
+
+    def defaultFunction(self):
+        # CLASS INIT
+        # from Template
+        varFunction = "defaultFunction"
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log:")
+
+        # ERROR
+        # from Template if tool is going down
+        #debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: ")
+
+        # TRY
+        # from Template if tool is going try
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: ")
+
+        # EXCEPT
+        # from Template if tool is going except
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: ")
+
+        # PRESS BUTTON
+        # from Template if tool is going press Button
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "~~~ Press Button: ")
+
+        # WHILE
+        # from Template if tool is going while
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1/2 WHILE: ")
+
+        # FOR
+        # from Template if tool is going for
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1-2 FOR: ")
+
+        # API Web Flask
+        # from Template if tool is going except
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: ")
+    pass
+
