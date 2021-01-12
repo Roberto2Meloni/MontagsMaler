@@ -8,7 +8,7 @@ import threading
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAbstractItemView
 from PyQt5.uic import loadUi
 
 
@@ -183,6 +183,7 @@ class LobbyPage(QWidget):
             model = QtGui.QStandardItemModel()
             print("model ok")
             self.playerView.setModel(model)
+            self.playerView.setEditTriggers(QAbstractItemView.NoEditTriggers)
             #self.playerView.setColumnCount(zSpieler%10)
             print("playerView ok")
 
@@ -191,6 +192,8 @@ class LobbyPage(QWidget):
                 model.appendRow(item)
 
             self.verbSpieler.setText("Verbundene Spieler: " + str(zSpieler))
+
+            #self.verbSpieler.setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents)
         except Exception as error:
             print(str(error))
 
@@ -201,7 +204,124 @@ class LobbyPage(QWidget):
     def gotoTeamPage(self):
         varFunction = "gotoTeamPage"
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Aktualisieren]")
+        myPages.setCurrentIndex(myPages.currentIndex() +1)
 
+
+class TeamSplitPage(QWidget):
+    varClass = "TeamSplitPage"
+
+    def __init__(self):
+        varFunction = "__init__"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Start Init Gui")
+
+        super(TeamSplitPage, self).__init__()
+        loadUi("PyQT/04TeamSplitPage.ui", self)
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Loading Gui success")
+
+        # all button
+        self.btn_Zurueck.clicked.connect(self.gotoLobbyPage)
+        self.btn_TeamErstellen.clicked.connect(self.berechneTeam)
+        self.btn_Weiter.clicked.connect(self.gotoPlayPage)
+
+    def berechneTeam(self):
+        varFunction = "berechneTeam"
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: Start Function")
+
+        userListCompleat = helperFunctionGame.lobbyTeamCreaterCompleat()
+        userListID = helperFunctionGame.lobbyTeamCreaterID()
+
+        teamBlau = []
+        teamRot = []
+
+        teamBlauNew = []
+        teamRotNew = []
+
+        lenPeople = len(userListID)
+        print("es gibt " + str(lenPeople) + " Mitspieler")
+
+        if lenPeople % 2 == 0:
+            print("Die anzahl spieler ist gerade")
+
+            while len(userListID):
+                playerBlau = choice(userListID)
+                teamBlau.append(playerBlau)
+                # user in sql Team eintragen
+                helperFunctionGame.addUsert2Team(str(playerBlau), "Blau")
+                userListID.remove(playerBlau)
+
+                playerRot = choice(userListID)
+                teamRot.append(playerRot)
+                helperFunctionGame.addUsert2Team(str(playerRot), "Rot")
+                userListID.remove(playerRot)
+
+        else:
+            print("Die anzahl Lobby ist ungerade!!!")
+
+            while len(userListID) != 1:
+                playerBlau = choice(userListID)
+                teamBlau.append(playerBlau)
+                userListID.remove(playerBlau)
+
+                playerB = choice(userListID)
+                teamRot.append(playerB)
+                userListID.remove(playerB)
+
+            # add last user in Team Blue
+            playerBlau = choice(userListID)
+            teamBlau.append(playerBlau)
+            userListID.remove(playerBlau)
+
+        # ID auf Benuztername auflösen von Team A
+        while len(teamBlau):
+            playerID = choice(teamBlau)
+            foo = int(playerID)
+            playerName = userListCompleat[foo]
+            teamBlauNew.append(playerName)
+            teamBlau.remove(playerID)
+
+        # ID auf Benuztername auflösen von Team B
+        while len(teamRot):
+            playerID = choice(teamRot)
+            foo = int(playerID)
+            playerName = userListCompleat[foo]
+            teamRotNew.append(playerName)
+            teamRot.remove(playerID)
+
+        modelBlue = QtGui.QStandardItemModel()
+        modelRed = QtGui.QStandardItemModel()
+
+        print("model ok")
+        self.list_blue.setModel(modelBlue)
+        self.list_red.setModel(modelRed)
+
+        for i in teamRotNew:
+            item = QtGui.QStandardItem(i)
+            modelRed.appendRow(item)
+        print("finish red Team")
+
+        for i in teamBlauNew:
+            item = QtGui.QStandardItem(i)
+            modelBlue.appendRow(item)
+        print("finish Blue Team")
+
+
+        zTeamBlue = str(len(teamBlauNew))
+        zTeamRed = str(len(teamRotNew))
+
+
+        self.label_blue.setText("Team Blau: " + zTeamBlue)
+        self.label_red.setText("Team Rot: " + zTeamRed)
+
+        # don't overwrite tabel
+        self.list_blue.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.list_red.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+
+    def gotoLobbyPage(self):
+        myPages.setCurrentIndex(myPages.currentIndex() - 1)
+
+    def gotoPlayPage(self):
+        pass
 
 
 # API Web Flask
@@ -253,12 +373,14 @@ if __name__ == "__main__":
     welcomePage = WelcomePage()
     tutorialPage = TutorialPage()
     lobbyPage = LobbyPage()
+    teamSplitPage = TeamSplitPage()
 
     # add Pages to StackeWidget
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: add Widgets to Stacked Widget")
     myPages.addWidget(welcomePage)
     myPages.addWidget(tutorialPage)
     myPages.addWidget(lobbyPage)
+    myPages.addWidget(teamSplitPage)
 
 
 

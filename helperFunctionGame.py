@@ -73,7 +73,7 @@ def checkDataBase():
         os.remove(pathTempNew + "/" + dataBase)
     else:
         pass
-    sql = """CREATE TABLE IF NOT EXISTS person (id integer Primary Key,name text, password text, ip text, team text, begriff1, begriff2, begriff3)"""
+    sql = """CREATE TABLE IF NOT EXISTS person (id integer Primary Key,name text, password text, ip text, team text, begriff1 text, begriff2 text, begriff3 text)"""
 
     if os.path.isfile(pathTempNew + "/" + dataBase):
         print("Datebnbank exisiter jetzt")
