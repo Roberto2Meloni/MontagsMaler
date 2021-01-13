@@ -123,6 +123,7 @@ def myIPFinder():
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: finding LAN IP")
     try:
         ip = subprocess.check_output("ipconfig")
+        print(ip)
         ip = ip.splitlines()
         ip = str(ip)
         ip = ip.split("Drahtlos-LAN-Adapter WLAN:")[1]
