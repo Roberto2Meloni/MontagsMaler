@@ -92,10 +92,25 @@ class WelcomePage(QMainWindow):
         self.btn_Start.clicked.connect(self.gotoTutPage)
 
         # Background Image
+
+        #self.label.setStyleSheet("border: 4px solid")
+        self.label.setPixmap(QtGui.QPixmap("PyQT/Image/background.jpeg"))
+
         #self.MainWindow.setPixmap("background.jpeg")
-
-
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
+
+        #self.mLayout.setStyleSheet(„ background-image: url(backgound.png);“)
+        #stylesheet = """
+        #    MainWindow {
+        #        background-image: url("PyQT/background.jpeg");
+        #        background-repeat: no-repeat;
+        #        background-position: center;
+        #    }
+        #
+#
+
+
+
 
 
     def gotoTutPage(self):
@@ -128,10 +143,10 @@ class TutorialPage(QWidget):
         string = "1. Verbinde dich mit dem WLAN [" + onlySSID + "]\n\n2. QR-Code Scannen\n\n3. Erstelle dein Benutzer\n\n4. Schliese den Browser nich!"
         self.label_tut.setText(string)
 
+
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
 
     def gotoWelPage(self):
-        print("hello")
         varFunction = "gotoWelPage"
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Zurück]")
         myPages.setCurrentIndex(myPages.currentIndex() - 1)
@@ -177,15 +192,11 @@ class LobbyPage(QWidget):
         try:
             userListSQL = helperFunctionGame.lobbyUserShow()
             zSpieler = len(userListSQL)
-            print("userlist Ok")
             #self.playerView.setObjectName(_fromUtf8("listView"))
 
             model = QtGui.QStandardItemModel()
-            print("model ok")
             self.playerView.setModel(model)
             self.playerView.setEditTriggers(QAbstractItemView.NoEditTriggers)
-            #self.playerView.setColumnCount(zSpieler%10)
-            print("playerView ok")
 
             for i in userListSQL:
                 item = QtGui.QStandardItem(i)
@@ -338,6 +349,8 @@ def hallo():
 @app.route("/creatUserInWeb", methods=["POST", "GET"])
 def creatUserInWeb():
     name = ""
+    #
+
     if request.method == "POST":
         name = request.form["name"]
         password = request.form["password"]
@@ -401,7 +414,6 @@ if __name__ == "__main__":
         # from Template if tool is going down
         debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: " + str(e))
         print(str(e))
-    print("fertig mit try")
     sys.exit(guiApp.exec_())
     # start webserver and gui
     # verifai Netzwork

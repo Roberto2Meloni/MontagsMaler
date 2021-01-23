@@ -18,15 +18,18 @@
   <property name="windowTitle">
    <string>MontagsMaler</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
-  <widget class="QWidget" name="centralwidget">
+  <widget class="QWidget" name="mLayout">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="font">
          <font>
           <pointsize>30</pointsize>
@@ -35,7 +38,10 @@
          </font>
         </property>
         <property name="text">
-         <string>Wilkommen bei MontagsMaler</string>
+         <string>Wilkommen bei MontagsMaler!!</string>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -55,6 +61,11 @@
           <width>0</width>
           <height>100</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>30</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Start</string>
