@@ -1,14 +1,14 @@
 # import public
 from random import choice
 import sys
-from flask import Flask, request, url_for, render_template
+from flask import Flask, request, render_template
 from OpenSSL import SSL
 import os
 import threading
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAbstractItemView
+from PyQt5 import QtGui, QtWidgets, uic
+from PyQt5.QtWidgets import QMainWindow, QWidget, QAbstractItemView
 from PyQt5.uic import loadUi
 
 
@@ -156,7 +156,7 @@ class TutorialPage(QWidget):
 
     def gotoLobPage(self):
         varFunction = "gotoLobPage"
-        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction,"~~~ Press Button: [Weiter]")
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Weiter]")
         myPages.setCurrentIndex(myPages.currentIndex() +1)
 
 class LobbyPage(QWidget):
