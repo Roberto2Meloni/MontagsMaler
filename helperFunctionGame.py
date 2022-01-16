@@ -1,12 +1,12 @@
 import os
 import subprocess
 from datetime import datetime
-from debugFunction import debug
 import sqlite3
 import qrcode
 import multiprocessing
 import sys
 import time
+from debugFunction import *
 
 # Variabel
 swFirmware = "helperFunctionGame SW: 1.0"
