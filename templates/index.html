@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MontagsMaler</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='indexStyle.css')}}">
+  </head>
+  <body>
+    <h1>MontagsMaler</h1>
+    <br>
+    <h2 id="wilkommen">Wilkommen bei MontagsMaler</h2>
+    <br>
+    <h4 id="wilkommen">Bitte w&auml;hle eine option aus.</h4>
+    <form id= "Knopf" method='GET' action='https://{{webServer}}:1818/loginUser'>
+      <input type='submit' value='Benuzter erstellen'>
+    </form>
+    <br>
+     <button id= "Knopf">erneut einloggen</button>
+  </body>
+</html>

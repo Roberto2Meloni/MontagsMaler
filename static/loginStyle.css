@@ -1,0 +1,128 @@
+#MontagsMalerBanner{
+  padding: 60px;
+  text-align: center;
+  background: #6495ED; /*blue*/
+  color: white;
+  font-size: 40px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+*{
+    padding:0;
+    margin: 0;
+    box.sizing: border-box;
+}
+:root{
+    --main-font: 'Lobster', cursive;
+}
+
+
+html{
+    font-family: sans-serif;
+}
+
+header{
+    height: 100vh;
+    width: 100%;
+    background-image: url("creatLoginNew.jpeg");
+    background-repeat: no-repeat;
+    background.size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.main-header{
+    text-align: center;
+    transition: 0.5s;
+}
+
+.main-header:hover{
+    -webkit-box-shadow: 22px -8px 63px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 22px -8px 63px 0px rgba(0,0,0,0.75);
+    box-shadow: 22px -8px 63px 0px rgba(0,0,0,0.75);
+}
+
+
+.main-header h1{
+    font.size: 3rem;
+    font-family: var(--main-font);
+}
+
+.main-header hr{
+    width: 50%;
+    margin: auto;
+    padding: 5px;
+    background: #E1F06C;
+    border: none;
+
+}
+
+.main-header h3{
+    margin: 20px;
+    font-size: 1.5rem;
+}
+
+.main-header input{
+    width: 90%;
+    padding: 1rem;
+    margin: 20px 0px;
+    border:none;
+    border-bottom: 2px solid #5F5FB0;
+    font-size: 1.5rem;
+    background: transparent;
+}
+#knopf{
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    background: #4CAF50;
+    color: #fff;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: 20px;
+}
+
+#knopf:hover{
+    transform: scale(1.2);
+}
+
+/* alt
+h3{
+  text-align: center;
+}
+
+#knopf{
+
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%
+  display: inline-block;
+  font-size: 16px;
+}
+
+
+form{
+
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%
+  text-decoration: none;
+  text-align: center;
+}
+
+#userLogin{
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%
+  text-decoration: none;
+  text-align: center;
+}
+*/

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MontagsMaler</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='loginStyle.css')}}">
+  </head>
+
+    <body>
+        <header>
+            <!-- <h1 id = MontagsMalerBanner>MontagsMaler</h1>*/ -->
+            <div class ="main-header">
+                <h1>Loging</h1>
+                <hr />
+                <h3>Wilkommen bei MontagsMaler</h3>
+                <form action="https://{{webServer}}:1818/creatUserInWeb" method="post">
+                    <br>
+                    <input type="text" placeholder="Spielername" name="name"><br/>
+                    <br>
+                    <input type="password" placeholder="******" name="password"><br/>
+                    <br>
+                    <input id="knopf" type="submit" value="Spieler erstellen">
+                </form>
+                <br>
+            </div>
+        </header>
+    </body>
+</html>
