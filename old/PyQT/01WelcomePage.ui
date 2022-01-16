@@ -18,6 +18,9 @@
   <property name="windowTitle">
    <string>MontagsMaler</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(0, 136, 255);</string>
+  </property>
   <widget class="QWidget" name="mLayout">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
@@ -36,6 +39,9 @@
           <weight>75</weight>
           <bold>true</bold>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>Wilkommen bei MontagsMaler!!</string>
@@ -66,6 +72,9 @@
          <font>
           <pointsize>30</pointsize>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(76, 175, 80);</string>
         </property>
         <property name="text">
          <string>Start</string>

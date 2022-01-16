@@ -1,14 +1,14 @@
 # import public
 from random import choice
 import sys
-from flask import Flask, request, url_for, render_template
+from flask import Flask, request, render_template
 from OpenSSL import SSL
 import os
 import threading
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAbstractItemView
+from PyQt5 import QtGui, QtWidgets, uic
+from PyQt5.QtWidgets import QMainWindow, QWidget, QAbstractItemView
 from PyQt5.uic import loadUi
 
 
@@ -44,8 +44,6 @@ helperFunctionGame.appBootFunction(swFirmware)
 # [2020-12-21 21:23:52.017477]   [127.0.0.1]   [debugFunction.py]   [no Class]   [creatLog]   [/// Log: Continue log file]
 
 # Pages Class
-
-
 class WelcomePage(QMainWindow):
     # from Template
     varClass = "WelcomePage(QMainWindow)"
@@ -94,7 +92,7 @@ class WelcomePage(QMainWindow):
         # Background Image
 
         #self.label.setStyleSheet("border: 4px solid")
-        self.label.setPixmap(QtGui.QPixmap("PyQT/Image/background.jpeg"))
+        #self.label.setPixmap(QtGui.QPixmap("PyQT/Image/background.jpeg"))
 
         #self.MainWindow.setPixmap("background.jpeg")
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
@@ -158,7 +156,7 @@ class TutorialPage(QWidget):
 
     def gotoLobPage(self):
         varFunction = "gotoLobPage"
-        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction,"~~~ Press Button: [Weiter]")
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Weiter]")
         myPages.setCurrentIndex(myPages.currentIndex() +1)
 
 class LobbyPage(QWidget):
@@ -334,6 +332,21 @@ class TeamSplitPage(QWidget):
     def gotoPlayPage(self):
         pass
 
+    def sendTeamToPlayer(self):
+        # Send to all users the name of the team
+        # get all user id from SQL
+        userListID = helperFunctionGame.lobbyTeamCreaterID()
+
+        # 1. Get ID, Name, port, team
+        # 2. Send to ip and port the team Name
+        #
+        for i in userListID:
+            varIP, varPort, varTeam = helperFunctionGame.getUserInfos4SplitTeam(i)
+
+
+        pass
+
+
 
 # API Web Flask
 @app.route("/")
@@ -350,17 +363,20 @@ def hallo():
 def creatUserInWeb():
     name = ""
     #
-
-    if request.method == "POST":
-        name = request.form["name"]
-        password = request.form["password"]
-        remotIP = request.environ['REMOTE_ADDR']
-        print("der Name von Web lautet: " + name)
-        print("Das pw lautet: " + password)
-        helperFunctionGame.lobbyUserCreater(name, remotIP, password)
-    else:
-        name = request.args.get("name")
-    return render_template("creatUserInWeb.html", newUserName=name, webServer=serverIP)
+    try:
+        if request.method == "POST":
+            name = request.form["name"]
+            password = request.form["password"]
+            remotIP = request.environ['REMOTE_ADDR']
+            remotPort = request.environ.get('REMOTE_PORT')
+            print("der Name von Web lautet: " + name)
+            print("Das pw lautet: " + password)
+            helperFunctionGame.lobbyUserCreater(name, remotIP, password, remotPort)
+        else:
+            name = request.args.get("name")
+        return render_template("creatUserInWeb.html", newUserName=name, webServer=serverIP)
+    except Exception as error:
+        print(str(error))
 
 
 def startWebServer():
@@ -402,9 +418,13 @@ if __name__ == "__main__":
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: ONE")
     try:
         serverIP = helperFunctionGame.myIPFinder()
+        print("try to run web")
         if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+            print("run i. o.")
             webServerProcess = threading.Thread(target=startWebServer, daemon=True).start()
+        print("Versuche testuser anzulegen")
         helperFunctionGame.testCreatNewUser()
+        print("Testuser ok")
         debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: finish creat test users!")
         debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: show Welcome Page!")
         myPages.show()

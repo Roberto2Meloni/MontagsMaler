@@ -4,9 +4,7 @@ from datetime import datetime
 import debugFunction
 import sqlite3
 import qrcode
-import multiprocessing
 import sys
-import time
 
 # Variabel
 swFirmware = "helperFunctionGame SW: 1.0"
@@ -73,7 +71,7 @@ def checkDataBase():
         os.remove(pathTempNew + "/" + dataBase)
     else:
         pass
-    sql = """CREATE TABLE IF NOT EXISTS person (id integer Primary Key,name text, password text, ip text, team text, begriff1 text, begriff2 text, begriff3 text)"""
+    sql = """CREATE TABLE IF NOT EXISTS person (id integer Primary Key,name text, password text, ip text, port text, team text, begriff1 text, begriff2 text, begriff3 text)"""
 
     if os.path.isfile(pathTempNew + "/" + dataBase):
         print("Datebnbank exisiter jetzt")
@@ -110,7 +108,7 @@ def ssidFinder():
         #print(type(ssid))
     except Exception as error:
         debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: cant't find ssid!!!")
-        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: " +str(error))
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: " + str(error))
         ssid = "not found ssid!!! watch log files"
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("/// Log: return SSID " + ssid))
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: END Function [ssidFinder]")
@@ -120,10 +118,9 @@ def myIPFinder():
     varFunction = "myIPFinder"
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [myIPFinder] ")
 
-    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: finding LAN IP")
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: finding WLAN IP")
     try:
         ip = subprocess.check_output("ipconfig")
-        print(ip)
         ip = ip.splitlines()
         ip = str(ip)
         ip = ip.split("Drahtlos-LAN-Adapter WLAN:")[1]
@@ -131,15 +128,32 @@ def myIPFinder():
         ip = ip.split(": ")[1]
         ip = ip.split("'")[0]
 
-        #print("--------------------")
-        #print(ip)
-        #print("--------------------")
+        # print("--------------------")
+        # print(ip)
+        # print("--------------------")
     except Exception as error:
-        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: Can't find IP Adress!!!")
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: Can't find IP Adress for WLAN!!!")
         debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("!!! Error: " + str(error)))
-        print("not found ip")
-        ip = "not found!!!"
-    debugFunction.debug(localHost,debugFileName, varClass, varFunction, ("/// Log: return ip: " + ip))
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: finding LAN IP")
+        try:
+            ip = subprocess.check_output("ipconfig")
+            ip = ip.splitlines()
+            ip = str(ip)
+            ip = ip.split("Ethernet-Adapter Ethernet:")[1]
+            ip = ip.split("IPv4-Adresse")[1]
+            ip = ip.split(": ")[1]
+            ip = ip.split("'")[0]
+
+            # print("--------------------")
+            # print(ip)
+            # print("--------------------")
+
+        except Exception as error:
+            debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: Can't find IP Adress for LAN!!!")
+            debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("!!! Error: " + str(error)))
+            print("not found ip")
+            ip = "not found!!!"
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("/// Log: return ip: " + ip))
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: End Function [myIPFinder] ")
     return ip
 
@@ -149,7 +163,7 @@ def killProgramm(fromField):
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("/// Log:Start killing Programm from: " + fromField))
     sys.exit()
 
-def lobbyUserCreater(varName, varPassword, varIP):
+def lobbyUserCreater(varName, varPassword, varIP, varPort):
     # from Template
     varFunction = "lobbyUserCreater"
     conn = sqlite3.connect(pathTempNew + "/" + dataBase)
@@ -162,7 +176,7 @@ def lobbyUserCreater(varName, varPassword, varIP):
     # print(type(varIP))
     # print(varIP)
 
-    conn.execute("INSERT INTO person(name, ip, password) VALUES(?,?,?)", (varName, varIP,varPassword))
+    conn.execute("INSERT INTO person(name, ip, password, port) VALUES(?,?,?,?)", (varName, varIP,varPassword, varPort))
     curs.close()
     conn.commit()
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: In SQL creat new User: " + varName)
@@ -241,6 +255,29 @@ def lobbyTeamCreaterID():
     debugFunction.debug(localHost, debugFileName, "no Class", "lobbyTeamCreater", ("Update Userlist withe ID:"))
     return userListID
 
+def getUserInfos4SplitTeam(varID):
+    # get IP and port 4 communication to User to tell him wich team he is
+    varIDNew = varID
+    varIP = ""
+    varPort = ""
+    varTeam = ""
+
+    debugFunction.debug(localHost, debugFileName, "no Class", "getUserInfos4SplitTeam", ("Get infos (IP/Port/Team) from ID ", varIDNew))
+
+    
+    conn = sqlite3.connect(pathTempNew + "/" + dataBase)
+    curs = conn.cursor()
+    curs.execute(sql)
+
+    # from id get IP/Port/Team and then return
+    curs.execute("SELECT id, name from 'person'")
+    row = curs.fetchone()
+    # now get to the info from sql
+
+    conn.commit()
+    curs.close()
+    debugFunction.debug(localHost, debugFileName, "no Class", "getUserInfos4SplitTeam", ("IP / Port = ", varIP, "/", varPort))
+    return varIP, varPort, varTeam
 
 def creatQR():
     # CLASS INIT
@@ -280,36 +317,36 @@ def appBootFunction(swFirmware):
 
 #lobbyFileCreater()
 def testCreatNewUser():
-    lobbyUserCreater("Roberto","IEMIE","192.168.1.1")
-    lobbyUserCreater("Fabio","EAE","192.168.1.2")
-    lobbyUserCreater("te","EAE","192.168.1.2")
-    lobbyUserCreater("te","EAE","192.168.1.2")
-    lobbyUserCreater("te","EAE","192.168.1.2")
-    lobbyUserCreater("te","EAE","192.168.1.2")
-    lobbyUserCreater("te","EAE","192.168.1.2")
-    lobbyUserCreater("te","EAE","192.168.1.2")
-    lobbyUserCreater("te","EAE","192.168.1.2")
-    lobbyUserCreater("Fabceio","EAE","192.168.1.2")
-    lobbyUserCreater("ae","EAE","192.168.1.2")
-    lobbyUserCreater("ae","EAE","192.168.1.2")
-    lobbyUserCreater("ae","EAE","192.168.1.2")
-    lobbyUserCreater("ae","EAE","192.168.1.2")
-    lobbyUserCreater("ae","EAE","192.168.1.2")
-    lobbyUserCreater("ae","EAE","192.168.1.2")
-    lobbyUserCreater("ae","EAE","192.168.1.2")
-    lobbyUserCreater("caec","EAE","192.168.1.2")
-    lobbyUserCreater("eaea","EAE","192.168.1.2")
-    lobbyUserCreater("hh","IMIE88","192.168.1.3")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("Maria","lmce558","192.168.1.4")
-    lobbyUserCreater("eae","lmce558","192.168.1.4")
-    lobbyUserCreater("hkhhi","lmce558","192.168.1.4")
+    lobbyUserCreater("Roberto","IEMIE","192.168.1.1","noPort")
+    lobbyUserCreater("Fabio","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("te","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("te","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("te","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("te","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("te","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("te","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("te","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("Fabceio","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("ae","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("ae","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("ae","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("ae","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("ae","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("ae","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("ae","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("caec","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("eaea","EAE","192.168.1.2","noPort")
+    lobbyUserCreater("hh","IMIE88","192.168.1.3","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("Maria","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("eae","lmce558","192.168.1.4","noPort")
+    lobbyUserCreater("hkhhi","lmce558","192.168.1.4","noPort")
 
 
 
