@@ -10,6 +10,7 @@ localHost = "127.0.0.1"
 varClass = "no Class"
 now = datetime.now()
 
+print("Hallo from debug")
 
 def creatFolder(folderpathTemp):
     # print("Start creat folder function")
@@ -35,6 +36,7 @@ def creatFolder(folderpathTemp):
                 os.system(r"md " + folderpathTemp)
             # print("[finish] folder Check")
         toolStart = False
+        print("folder Create!")
 
 
 # start the debugging

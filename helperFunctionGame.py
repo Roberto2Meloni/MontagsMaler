@@ -6,12 +6,13 @@ import qrcode
 import multiprocessing
 import sys
 import time
-from debugFunction import *
+from main import debugFunction
+from main import pathTempNew
 
 # Variabel
 swFirmware = "helperFunctionGame SW: 1.0"
-pathTemp = R"${TEMP}/MontagsMaler"
-pathTempNew = os.path.expandvars(pathTemp)
+#pathTemp = R"${TEMP}/MontagsMaler"
+#pathTempNew = os.path.expandvars(pathTemp)
 now = datetime.now()
 dataBase = "DataBase.db"
 qrCodeFile = "webServerQR.png"
@@ -72,7 +73,8 @@ def ssidFinder():
 
 def myIPFinder():
     varFunction = "myIPFinder"
-    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [myIPFinder] ")
+    print("ahhlo ip")
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [myIPFinder]")
 
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: finding WLAN IP")
     try:

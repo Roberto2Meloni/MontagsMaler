@@ -9,6 +9,7 @@
 ######################################################################################
 
 # public Library
+import time
 from random import choice
 import sys
 from flask import Flask, request, url_for, render_template
@@ -16,15 +17,14 @@ from OpenSSL import SSL
 import os
 import threading
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAbstractItemView
 from PyQt5.uic import loadUi
 
 # local library
-import updateFunction
+# import updateFunction
 import debugFunction
-import helperFunctionGame
+
 
 # Some file variable
 fromField = "main.py"
@@ -37,7 +37,7 @@ app = Flask(__name__)
 new_environ = os.environ.copy()
 qrCodeFile = "webServerQR.png"
 
-helperFunctionGame.appBootFunction(swFirmware)
+
 
 # debugs Variabel
 # ip, debugFileName, codeClass, function, error
@@ -49,10 +49,10 @@ varFunction = "main_debug_class"
 # Path Variable 4 debugFunction
 pathTemp = R"${TEMP}/MontagsMaler"  # To Do
 pathTempNew = os.path.expandvars(pathTemp)
-folderpathTemp = r"%temp%\MontagsMaler" # To Do
+folderpathTemp = r"%temp%\MontagsMaler"  # To Do
 
 # update filename
-updateFile = R"${TEMP}/Update_Framework/update.msi" # To Do
+updateFile = R"${TEMP}/Update_Framework/update.msi"  # To Do
 updateFile = os.path.expandvars(updateFile)
 
 # Stat variabels
@@ -73,10 +73,18 @@ up_version_link = "https://melonih0me.ddns.net/index.php/s/xnDPfkiBnHSRcts/downl
 # this folder is to upload log files, check permissions!
 up_log_link = "https://melonih0me.ddns.net/index.php/s/77kFbRD3ifSE56o"
 
+
+def something_run():
+    import helperFunctionGame
+    helperFunctionGame.appBootFunction(swFirmware)
+
+something_run()
+
 # all Class
 class WelcomePage(QMainWindow):
     # from Template
     varClass = "WelcomePage(QMainWindow)"
+
     def defaultFunction(self):
         # CLASS INIT
         # from Template
@@ -121,29 +129,26 @@ class WelcomePage(QMainWindow):
 
         # Background Image
 
-        #self.label.setStyleSheet("border: 4px solid")
-        #self.label.setPixmap(QtGui.QPixmap("PyQT/Image/background.jpeg"))
+        # self.label.setStyleSheet("border: 4px solid")
+        # self.label.setPixmap(QtGui.QPixmap("PyQT/Image/background.jpeg"))
 
-        #self.MainWindow.setPixmap("background.jpeg")
+        # self.MainWindow.setPixmap("background.jpeg")
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
 
-        #self.mLayout.setStyleSheet(„ background-image: url(backgound.png);“)
-        #stylesheet = """
+        # self.mLayout.setStyleSheet(„ background-image: url(backgound.png);“)
+        # stylesheet = """
         #    MainWindow {
         #        background-image: url("PyQT/background.jpeg");
         #        background-repeat: no-repeat;
         #        background-position: center;
         #    }
         #
-#
 
-
-
-
+    #
 
     def gotoTutPage(self):
         varFunction = "gotoTutPage"
-        myPages.setCurrentIndex(myPages.currentIndex()+1)
+        myPages.setCurrentIndex(myPages.currentIndex() + 1)
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Start]")
 
 
@@ -171,7 +176,6 @@ class TutorialPage(QWidget):
         string = "1. Verbinde dich mit dem WLAN [" + onlySSID + "]\n\n2. QR-Code Scannen\n\n3. Erstelle dein Benutzer\n\n4. Schliese den Browser nich!"
         self.label_tut.setText(string)
 
-
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "/// Log: End Init Gui")
 
     def gotoWelPage(self):
@@ -186,8 +190,9 @@ class TutorialPage(QWidget):
 
     def gotoLobPage(self):
         varFunction = "gotoLobPage"
-        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction,"~~~ Press Button: [Weiter]")
-        myPages.setCurrentIndex(myPages.currentIndex() +1)
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Weiter]")
+        myPages.setCurrentIndex(myPages.currentIndex() + 1)
+
 
 class LobbyPage(QWidget):
     varClass = "LobbyPage(QWidget)"
@@ -220,7 +225,7 @@ class LobbyPage(QWidget):
         try:
             userListSQL = helperFunctionGame.lobbyUserShow()
             zSpieler = len(userListSQL)
-            #self.playerView.setObjectName(_fromUtf8("listView"))
+            # self.playerView.setObjectName(_fromUtf8("listView"))
 
             model = QtGui.QStandardItemModel()
             self.playerView.setModel(model)
@@ -232,18 +237,16 @@ class LobbyPage(QWidget):
 
             self.verbSpieler.setText("Verbundene Spieler: " + str(zSpieler))
 
-            #self.verbSpieler.setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents)
+            # self.verbSpieler.setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents)
         except Exception as error:
             print(str(error))
 
-
-
-        #self.playerView
+        # self.playerView
 
     def gotoTeamPage(self):
         varFunction = "gotoTeamPage"
         debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Aktualisieren]")
-        myPages.setCurrentIndex(myPages.currentIndex() +1)
+        myPages.setCurrentIndex(myPages.currentIndex() + 1)
 
 
 class TeamSplitPage(QWidget):
@@ -343,10 +346,8 @@ class TeamSplitPage(QWidget):
             modelBlue.appendRow(item)
         print("finish Blue Team")
 
-
         zTeamBlue = str(len(teamBlauNew))
         zTeamRed = str(len(teamRotNew))
-
 
         self.label_blue.setText("Team Blau: " + zTeamBlue)
         self.label_red.setText("Team Rot: " + zTeamRed)
@@ -354,7 +355,6 @@ class TeamSplitPage(QWidget):
         # don't overwrite tabel
         self.list_blue.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.list_red.setEditTriggers(QAbstractItemView.NoEditTriggers)
-
 
     def gotoLobbyPage(self):
         myPages.setCurrentIndex(myPages.currentIndex() - 1)
@@ -373,9 +373,7 @@ class TeamSplitPage(QWidget):
         for i in userListID:
             varIP, varPort, varTeam = helperFunctionGame.getUserInfos4SplitTeam(i)
 
-
         pass
-
 
 
 # API Web Flask
@@ -414,7 +412,6 @@ def startWebServer():
     varFunction = "startWebServer"
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: RUN Webserver on Port 1818!")
     app.run(host=serverIP, ssl_context='adhoc', port=1818, debug=False)
-
 
 
 # Start Script
@@ -480,7 +477,6 @@ if __name__ == "__main__":
     # creat Date for Question to paint
     # foting for enemi team
 
-
     # uptodate = updateFunction.check4update(up_version_link, swFirmware)
     # if uptodate == False:
     #     foo = input("Update available!\nDo you want to update? [y/yes]")
@@ -492,12 +488,11 @@ if __name__ == "__main__":
     #     else:
     #         debugFunction.debug(ip, debugFileName, codeClass, function, ("!!! Update available !!! --- No download startet, input: " + str(foo)))
 
+
 # Templates
 class Default0():
-
     # from Template
     varClass = "Default0()"
-
 
     def defaultFunction(self):
         # CLASS INIT
@@ -507,7 +502,7 @@ class Default0():
 
         # ERROR
         # from Template if tool is going down
-        #debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: ")
+        # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: ")
 
         # TRY
         # from Template if tool is going try
@@ -538,6 +533,6 @@ class Default0():
         # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "1-2 FOR: ")
 
     pass
-        #@app.route("/")
-        #def index():
-        #    return render_template("index.html", webServer=serverIP)
+    # @app.route("/")
+    # def index():
+    #    return render_template("index.html", webServer=serverIP)
