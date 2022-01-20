@@ -1,0 +1,32 @@
+Netzwerkinterface
+
+output:
+
+b'\r\nWindows-IP-Konfiguration\r\n\r\n\r\n
+Ethernet-Adapter Ethernet 2:\r\n\r\n
+Medienstatus. . . . . . . . . . . : Medium getrennt\r\n
+Verbindungsspezifisches DNS-Suffix: \r\n\r\n
+
+Ethernet-Adapter Ethernet:\r\n\r\n
+Verbindungsspezifisches DNS-Suffix: eg.local\r\n
+Verbindungslokale IPv6-Adresse  . : fe80::9c86:e9bd:46cb:d7ce%11\r\n
+IPv4-Adresse  . . . . . . . . . . : 10.11.1.123\r\n
+Subnetzmaske  . . . . . . . . . . : 255.255.255.0\r\n
+Standardgateway . . . . . . . . . : 10.11.1.254\r\n\r\n
+
+
+Ethernet-Adapter VirtualBox Host-Only Network:\r\n\r\n
+Verbindungsspezifisches DNS-Suffix: \r\n
+Verbindungslokale IPv6-Adresse  . : fe80::ec82:3d80:3045:9d65%18\r\n
+IPv4-Adresse  . . . . . . . . . . : 192.168.56.1\r\n
+Subnetzmaske  . . . . . . . . . . : 255.255.255.0\r\n
+Standardgateway . . . . . . . . . : \r\n\r\n
+
+
+Drahtlos-LAN-Adapter LAN-Verbindung* 2:\r\n\r\n
+Medienstatus. . . . . . . . . . . : Medium getrennt\r\n
+Verbindungsspezifisches DNS-Suffix: \r\n\r\n
+Drahtlos-LAN-Adapter WLAN:\r\n\r\n
+Medienstatus. . . . . . . . . . . : Medium getrennt\r\n
+Verbindungsspezifisches DNS-Suffix: \r\n'
+not found ip

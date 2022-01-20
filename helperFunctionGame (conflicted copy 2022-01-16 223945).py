@@ -4,9 +4,7 @@ from datetime import datetime
 import debugFunction
 import sqlite3
 import qrcode
-import multiprocessing
 import sys
-import time
 
 # Variabel
 swFirmware = "helperFunctionGame SW: 1.0"
@@ -110,7 +108,7 @@ def ssidFinder():
         #print(type(ssid))
     except Exception as error:
         debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: cant't find ssid!!!")
-        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: " +str(error))
+        debugFunction.debug(localHost, debugFileName, varClass, varFunction, "!!! Error: " + str(error))
         ssid = "not found ssid!!! watch log files"
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("/// Log: return SSID " + ssid))
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: END Function [ssidFinder]")
@@ -155,7 +153,7 @@ def myIPFinder():
             debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("!!! Error: " + str(error)))
             print("not found ip")
             ip = "not found!!!"
-    debugFunction.debug(localHost,debugFileName, varClass, varFunction, ("/// Log: return ip: " + ip))
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, ("/// Log: return ip: " + ip))
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: End Function [myIPFinder] ")
     return ip
 
@@ -264,7 +262,7 @@ def getUserInfos4SplitTeam(varID):
     varPort = ""
     varTeam = ""
 
-    debugFunction.debug(localHost, debugFileName, "no Class", "getUserInfos4SplitTeam",("Get infos (IP/Port/Team) from ID ", varIDNew))
+    debugFunction.debug(localHost, debugFileName, "no Class", "getUserInfos4SplitTeam", ("Get infos (IP/Port/Team) from ID ", varIDNew))
 
     
     conn = sqlite3.connect(pathTempNew + "/" + dataBase)

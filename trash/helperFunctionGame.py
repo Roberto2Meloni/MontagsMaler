@@ -1,17 +1,18 @@
 import os
 import subprocess
 from datetime import datetime
-import debugFunction
 import sqlite3
 import qrcode
 import multiprocessing
 import sys
 import time
+from main import pathTempNew
+import debugFunction
 
 # Variabel
 swFirmware = "helperFunctionGame SW: 1.0"
-pathTemp = R"${TEMP}/MontagsMaler"
-pathTempNew = os.path.expandvars(pathTemp)
+#pathTemp = R"${TEMP}/MontagsMaler"
+#pathTempNew = os.path.expandvars(pathTemp)
 now = datetime.now()
 dataBase = "DataBase.db"
 qrCodeFile = "webServerQR.png"
@@ -20,52 +21,6 @@ localHost = "127.0.0.1"
 debugFileName = "helperFunctionGame.py"
 people = list()
 
-def creatFolder():
-    varFunction = "defaultFunction"
-    # variabel
-    folderName = "MontagsMaler"
-    pathTemp = R"${TEMP}/" + folderName
-    pathTempNew = os.path.expandvars(pathTemp)
-    #updateFile = R"${TEMP}/SIPPhoneManager/Update_File.jpg"
-    #updateFileNew = os.path.expandvars(updateFile)
-
-    toolStart = True
-    folderCheck = True
-    updateCheck = False
-
-    # List, what is to chek
-    # print("Dose the folder SIPPhoenManager exist in User Temp Folder?\n"
-    #     "Does it hav a update File?\n"
-    #    "...\n")
-
-    while toolStart == True:
-        # check that the Folder for debuging and update exist!
-        # print("[start] toolStart")
-        while folderCheck == True:
-            # print("[start] folder Check")
-            if os.path.exists(pathTempNew):
-                # print("[folder] exist")
-                folderCheck = False
-            else:
-                # print("[folder] not exist")
-                # print("[folder] creat in Temp")
-                os.system(r"md %temp%\MontagsMaler")
-            # print("[finish] folder Check")
-        while updateCheck == True:
-            # print("[start] file Chek")
-            if os.path.isfile(updateFileNew):
-                #    print("[file] exist")
-                #   print("[file] delet form folder")
-                os.system(r"del %temp%\MontagsMaler\Update_File.jpg")
-                updateCheck = False
-            else:
-                # print("[file] not exist")
-                updateCheck = False
-            # print("[finish] file check")
-        # print("[finish] tool start")
-        toolStart = False
-
-creatFolder()
 
 def checkDataBase():
     #Database
@@ -86,10 +41,9 @@ def checkDataBase():
     connection.commit()
     return sql
 
-sql = checkDataBase()
 
-#debugFunction.debug(localHost, debugFileName, "no Class", "lobbyFileCreater", "sqlite Database exist now")
-
+sql = "Hallo"
+#sql = checkDataBase()
 
 
 def ssidFinder():
@@ -118,7 +72,8 @@ def ssidFinder():
 
 def myIPFinder():
     varFunction = "myIPFinder"
-    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [myIPFinder] ")
+    print("ahhlo ip")
+    debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: START Function [myIPFinder]")
 
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "+++ Try: finding WLAN IP")
     try:
@@ -309,9 +264,10 @@ def creatQR():
 def appBootFunction(swFirmware):
     # from Template
     varFunction = "appBootFunction"
+    sql = checkDataBase()
     #creatFolder()
     #checkDataBase()
-    debugFunction.creatLog("helpderFuntcionGame", swFirmware)
+    # debugFunction.creatLog("helpderFuntcionGame", swFirmware)
     creatQR()
     debugFunction.debug(localHost, debugFileName, varClass, varFunction, "/// Log: Finish all boot Function")
 
@@ -395,4 +351,3 @@ class Default0():
         # from Template if tool is going except
         # debugFunction.debug(localHost, debugFileName, varClass, varFunction, "--- Except: ")
     pass
-

@@ -51,6 +51,10 @@ pathTemp = R"${TEMP}/MontagsMaler"  # To Do
 pathTempNew = os.path.expandvars(pathTemp)
 folderpathTemp = r"%temp%\MontagsMaler"  # To Do
 
+debugFunction.creatFolder(folderpathTemp)
+
+
+
 # update filename
 updateFile = R"${TEMP}/Update_Framework/update.msi"  # To Do
 updateFile = os.path.expandvars(updateFile)
@@ -75,6 +79,7 @@ up_log_link = "https://melonih0me.ddns.net/index.php/s/77kFbRD3ifSE56o"
 
 
 def something_run():
+    print("try import heldperfunction")
     import helperFunctionGame
     helperFunctionGame.appBootFunction(swFirmware)
 
