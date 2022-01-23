@@ -1,14 +1,14 @@
 # import public
 from random import choice
 import sys
-from flask import Flask, request, url_for, render_template
+from flask import Flask, request, render_template
 from OpenSSL import SSL
 import os
 import threading
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QAbstractItemView
+from PyQt5 import QtGui, QtWidgets, uic
+from PyQt5.QtWidgets import QMainWindow, QWidget, QAbstractItemView
 from PyQt5.uic import loadUi
 
 
@@ -34,7 +34,14 @@ varClass = "no Class"
 
 
 helperFunctionGame.appBootFunction(swFirmware)
-
+# muss hier das debuging erstellen, ansonsten passiert das:
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [/// Log: START Function [ssidFinder] ]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [+++ Try: splitt ssid]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [/// Log: return SSID 3Unbekannt]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [helperFunctionGame.py]   [no Class]   [ssidFinder]   [/// Log: END Function [ssidFinder]]
+# [2020-12-21 21:23:52.017477]   [----------]   [----------]   [----------]   [----------]   [----------]
+# [2020-12-21 21:23:52.017477]   [IP - Adress]   [File Name]   [Class Name]   [Function Name]   [Message Typ]
+# [2020-12-21 21:23:52.017477]   [127.0.0.1]   [debugFunction.py]   [no Class]   [creatLog]   [/// Log: Continue log file]
 
 # Pages Class
 class WelcomePage(QMainWindow):
@@ -149,7 +156,7 @@ class TutorialPage(QWidget):
 
     def gotoLobPage(self):
         varFunction = "gotoLobPage"
-        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction,"~~~ Press Button: [Weiter]")
+        debugFunction.debug(localHost, debugFileName, self.varClass, varFunction, "~~~ Press Button: [Weiter]")
         myPages.setCurrentIndex(myPages.currentIndex() +1)
 
 class LobbyPage(QWidget):
